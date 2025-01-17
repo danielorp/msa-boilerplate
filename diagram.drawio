@@ -1,0 +1,105 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.6">
+  <diagram name="Page-1" id="p4-ocdAhSnpiAyjson57">
+    <mxGraphModel dx="2051" dy="921" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-1" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="965" y="355" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-2" value="Integration System" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="920" y="565" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-4" value="WAF&lt;br&gt;&lt;br&gt;(webapplication&lt;div&gt;firewall)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="340" width="90" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-5" value="Load Balancer" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="340" width="90" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TMVeo3-OWL7xSRZ-53WE-6" target="TMVeo3-OWL7xSRZ-53WE-22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="415" />
+              <mxPoint x="370" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-6" value="API Gateway" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="340" width="90" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-7" value="Frontend" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="500" width="90" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-9" value="Event Bus" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" vertex="1" parent="1">
+          <mxGeometry x="224" y="340" width="110" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TMVeo3-OWL7xSRZ-53WE-22" target="TMVeo3-OWL7xSRZ-53WE-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-22" value="ORDERS &amp;amp; QUOTE" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="30" y="230" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-23" value="SHIPPERS" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="-120" y="390" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-24" value="CARRIERS &amp;amp; DRIVERS" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="-80" y="490" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-25" value="SHIPMENTS" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry y="500" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-26" value="PAYMENTS" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="320" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-27" value="CACHE" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-60" y="620" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-28" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="TMVeo3-OWL7xSRZ-53WE-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="650" y="550" as="sourcePoint" />
+            <mxPoint x="720.7106781186548" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-29" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="TMVeo3-OWL7xSRZ-53WE-4" target="TMVeo3-OWL7xSRZ-53WE-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="810" y="550" as="sourcePoint" />
+            <mxPoint x="880.7106781186548" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-30" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="TMVeo3-OWL7xSRZ-53WE-4" target="TMVeo3-OWL7xSRZ-53WE-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="810" y="550" as="sourcePoint" />
+            <mxPoint x="880.7106781186548" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-31" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TMVeo3-OWL7xSRZ-53WE-5" target="TMVeo3-OWL7xSRZ-53WE-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="489.28932188134524" y="550" as="sourcePoint" />
+            <mxPoint x="489.28932188134524" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-32" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=1;entryY=0.455;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TMVeo3-OWL7xSRZ-53WE-5" target="TMVeo3-OWL7xSRZ-53WE-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="489.28932188134524" y="550" as="sourcePoint" />
+            <mxPoint x="489.28932188134524" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-34" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="-260" y="440" width="120" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-10" value="WRITE" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="TMVeo3-OWL7xSRZ-53WE-34">
+          <mxGeometry x="10" y="65" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-14" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="TMVeo3-OWL7xSRZ-53WE-34">
+          <mxGeometry width="120" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-33" value="READ" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="TMVeo3-OWL7xSRZ-53WE-34">
+          <mxGeometry x="10" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TMVeo3-OWL7xSRZ-53WE-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.008;entryY=0.38;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TMVeo3-OWL7xSRZ-53WE-26" target="TMVeo3-OWL7xSRZ-53WE-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
