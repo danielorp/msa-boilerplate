@@ -47,3 +47,43 @@ Body: {
 ```
 
 ```
+
+## How to build
+
+- Build Docker api-gateway image
+
+```
+docker build -t api-gateway ./api-gateway
+```
+
+- Check to see if you have ingress already running.
+
+```
+kubectl get pods -n ingress-nginx
+```
+
+- If it's not running, install it.
+
+```
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
+```
+
+- Install helm dependencies
+
+```
+helm dependency build
+```
+
+- Add DNS to your /etc/hosts
+
+```
+127.0.0.1 tms-services.local
+```
+
+- Install the helm chart
+
+```
+helm install tms-services ./tms-services
+```
