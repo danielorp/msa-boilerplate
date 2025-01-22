@@ -1,0 +1,58 @@
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+  hosts:
+    - host: tms-services.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+service:
+  type: ClusterIP
+  port: 8000
+
+api_gateway:
+  image: 
+    repository: api-gateway
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  fullname: "api_gateway"
+
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 8000
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 8000
+
+keycloak:
+  auth:
+    adminUser: admin
+    adminPassword: adminpassword
+
+  replicaCount: 1
+
+  service:
+    type: LoadBalancer
+    port: 80
+
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hostname: keycloak.local
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 100m
+
+  postgresql:
+    enabled: true
+    auth:
+      postgresPassword: postgrespassword
+      database: keycloak
+      username: keycloak
+      password: keycloakpassword
