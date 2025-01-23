@@ -5,10 +5,10 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy the FastAPI application code
-COPY app.py .
+COPY * .
 
 # Install FastAPI and Uvicorn
-RUN pip install fastapi uvicorn
+RUN pip install fastapi uvicorn python-jose[cryptography] python-decouple cryptography requests
 
 # Expose port 8000 for the FastAPI app
 EXPOSE 8000
