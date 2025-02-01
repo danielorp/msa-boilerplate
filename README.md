@@ -1,6 +1,9 @@
 # Microservice Architecture Boilerplate
 
 ## Overview
+
+Every application comes with its own set of challenges. Lately, I've been diving into common data-heavy system issues, drawing inspiration from the book _Designing Data-Intensive Applications_.
+
 This project consists of a set of microservices designed to explore and experiment with:
 - **Asynchronous Messaging:** Efficient communication between services
 - **Observability:** Improved system monitoring and logging
