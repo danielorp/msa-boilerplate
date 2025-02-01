@@ -4,7 +4,7 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
   hosts:
-    - host: tms-services.local
+    - host: msa-services.local
       paths:
         - path: /
           pathType: Prefix

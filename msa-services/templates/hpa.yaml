@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "tms-services.fullname" . }}
+  name: {{ include "msa-services.fullname" . }}
   labels:
-    {{- include "tms-services.labels" . | nindent 4 }}
+    {{- include "msa-services.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "tms-services.fullname" . }}
+    name: {{ include "msa-services.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

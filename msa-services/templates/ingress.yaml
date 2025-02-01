@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "tms-services.fullname" . }}
+  name: {{ include "msa-services.fullname" . }}
   labels:
-    {{- include "tms-services.labels" . | nindent 4 }}
+    {{- include "msa-services.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -35,7 +35,7 @@ spec:
             {{- end }}
             backend:
               service:
-                name: {{ include "tms-services.fullname" $ }}
+                name: {{ include "msa-services.fullname" $ }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}

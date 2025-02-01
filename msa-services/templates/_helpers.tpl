@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "tms-services.name" -}}
+{{- define "msa-services.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "tms-services.fullname" -}}
+{{- define "msa-services.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "tms-services.chart" -}}
+{{- define "msa-services.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "tms-services.labels" -}}
-helm.sh/chart: {{ include "tms-services.chart" . }}
-{{ include "tms-services.selectorLabels" . }}
+{{- define "msa-services.labels" -}}
+helm.sh/chart: {{ include "msa-services.chart" . }}
+{{ include "msa-services.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "tms-services.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "tms-services.name" . }}
+{{- define "msa-services.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "msa-services.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "tms-services.serviceAccountName" -}}
+{{- define "msa-services.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "tms-services.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "msa-services.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

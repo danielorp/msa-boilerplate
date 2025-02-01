@@ -1,89 +1,65 @@
-## Use cases
+# Microservice Architecture Boilerplate
 
-Most important: 
-- Logistics Operator must be able to accept an order and publish it to Carriers.
-- Carrier must be able to accept a shipment order and turn it into a shipment.
-- Shipper must be able to receive all the shipment information.
-- Carrier should be able to signal the pick up load start and finish.
-- Carrier should be able to signal the pick up delivery start and finish.
+## Overview
+This project consists of a set of microservices designed to explore and experiment with:
+- **Asynchronous Messaging:** Efficient communication between services
+- **Observability:** Improved system monitoring and logging
+- **Chaos Engineering:** Testing the system’s resilience under unexpected conditions
+- **Authentication Methods:** Evaluation of various secure access mechanisms
 
-Less important:
-- Shipper should be able to ask and receive a shipment quote.
-- Shipper must be able to turn the quote into an order.
-- Logistics Operator should be able to pay the Carrier and generate invoice to Shipper.
+The architecture undergoes stress testing under constrained processing power to push its resilience and efficiency to the limits.
 
+---
 
-## Entities
+## How to Build
 
-- Shipper
-- Logistics Operator
-- Carrier
-- Order
-- Shipment
-- Pickup
-- Delivery
+### Build Docker Images
 
-## Endpoints
-
-```
-POST /order -> Order
-Body: {
-    pickupLocation,
-    deliveryDestination,
-    weight,
-    volume,
-    pickupDatetime
-}
-/* Returns an Order object containing the orderId along with Carrier information */
-```
-
-```
-POST /shipment -> Shipment
-Body: {
-    orderId
-}
-```
-
-```
-
-```
-
-## How to build
-
-- Build Docker api-gateway image
-
-```
+#### API Gateway
+To build the Docker image for the API Gateway, run:
+```bash
 docker build -t api-gateway ./api-gateway
 ```
 
-- Check to see if you have ingress already running.
+---
 
-```
+### Installing Helm Packages
+
+#### Check Existing Ingress
+Verify if an ingress controller is already running:
+```bash
 kubectl get pods -n ingress-nginx
 ```
 
-- If it's not running, install it.
-
-```
+#### Install Ingress if Necessary
+If the ingress controller is not running, install it using Helm:
+```bash
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
 ```
 
-- Install helm dependencies
-
-```
+#### Install Helm Dependencies
+Build the Helm chart dependencies:
+```bash
 helm dependency build
 ```
 
-- Add DNS to your /etc/hosts
+#### Configure DNS
+Add the following entry to your `/etc/hosts` file:
+```bash
+127.0.0.1 msa.local
+```
 
-```
-127.0.0.1 tms-services.local
+#### Install Helm Chart
+Deploy the Helm chart with:
+```bash
+helm install msa-services ./msa-services
 ```
 
-- Install the helm chart
+---
 
-```
-helm install tms-services ./tms-services
-```
+## Notes
+- Ensure Kubernetes and Helm are properly installed and configured.
+- Modify the DNS entry to match your environment if needed.
+- Monitor resource usage to observe system behavior under stress conditions.
