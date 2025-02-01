@@ -15,6 +15,8 @@ service:
   port: 8000
 
 api_gateway:
+  nameOverride: api-gateway
+
   image: 
     repository: api-gateway
     tag: latest
@@ -32,6 +34,7 @@ api_gateway:
       port: 8000
 
 keycloak:
+  fullnameOverride: keycloak
   auth:
     adminUser: admin
     adminPassword: adminpassword
@@ -39,17 +42,18 @@ keycloak:
   replicaCount: 1
 
   service:
-    type: LoadBalancer
-    port: 80
+    type: ClusterIP
+    port: 8081
 
   ingress:
-    enabled: true
-    ingressClassName: "nginx"
-    hostname: keycloak.local
-    annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    enabled: false
+
+  extraEnv:
+    - name: KEYCLOAK_FRONTEND_URL
+      value: "http://keycloak:8081"
 
   postgresql:
+    fullnameOverride: keycloak-postgresql
     enabled: true
     auth:
       postgresPassword: postgrespassword
