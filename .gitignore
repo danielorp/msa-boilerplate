@@ -169,3 +169,12 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Created by https://www.toptal.com/developers/gitignore/api/helm
+# Edit at https://www.toptal.com/developers/gitignore?templates=helm
+
+### Helm ###
+# Chart dependencies
+**/charts/*.tgz
+
+# End of https://www.toptal.com/developers/gitignore/api/helm
