@@ -2,9 +2,9 @@
 
 ## Overview
 
-Every application comes with its own set of challenges. Lately, I've been diving into common data-heavy system issues, drawing inspiration from the book _Designing Data-Intensive Applications_.
+This repository aims to implement the most common patterns for microservices and tackle a few of the issues that might arise. These implementations draw inspiration from the book _Designing Data-Intensive Applications_.
 
-This project consists of a set of microservices designed to explore and experiment with:
+Initially, this set of microservices is designed to explore and experiment with:
 - **Asynchronous Messaging:** Efficient communication between services
 - **Observability:** Improved system monitoring and logging
 - **Chaos Engineering:** Testing the system’s resilience under unexpected conditions
@@ -23,8 +23,6 @@ To build the Docker image for the API Gateway, run:
 ```bash
 docker build -t api-gateway ./api-gateway
 ```
-
----
 
 ### Installing Helm Packages
 
@@ -60,9 +58,15 @@ Deploy the Helm chart with:
 helm install msa-services ./msa-services
 ```
 
----
-
-## Notes
+### Notes
 - Ensure Kubernetes and Helm are properly installed and configured.
 - Modify the DNS entry to match your environment if needed.
 - Monitor resource usage to observe system behavior under stress conditions.
+
+---
+
+## Authentication Server Workflow
+
+Here's a breakdown on how the authentication workflow should operate.
+![authentication-workflow](assets/authentication-workflow.webp)
+
