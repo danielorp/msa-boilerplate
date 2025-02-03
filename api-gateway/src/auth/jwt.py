@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from jose.exceptions import JWTError
-from constants import KEYCLOAK_SERVER_URL, REALM_NAME, CLIENT_ID
+from src.constants import KEYCLOAK_SERVER_URL, REALM_NAME, CLIENT_ID
 
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
