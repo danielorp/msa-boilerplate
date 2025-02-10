@@ -1,5 +1,5 @@
 from fastapi import FastAPI, status
-from src.auth import endpoints as auth_endpoints, middleware as auth_middleware
+from auth import endpoints as auth_endpoints, middleware as auth_middleware
 
 app = FastAPI()
 

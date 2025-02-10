@@ -1,16 +1,18 @@
-from fastapi import WebSocket, status, Depends, APIRouter
-from src.auth.jwt import verify_token
+from typing import Annotated
+from fastapi import Depends, APIRouter
+from fastapi.security import OAuth2PasswordRequestForm
+from auth.models import User
+from auth.controller import get_current_active_user, generate_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/token")
-async def generate_token(username, password):
-    return
+async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+    response = generate_token(form_data.username, form_data.password)
+    return {"access_token": response["access_token"], "token_type": response["token_type"]}
 
-
-# @router.websocket("/ws")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await websocket.accept()
-#     while True:
-#         data = await websocket.receive_text()
-#         await websocket.send_text(f"Message text was: {data}")
+@router.get("/users/me")
+async def read_users_me(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+):
+    return current_user
