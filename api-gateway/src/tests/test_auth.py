@@ -8,7 +8,8 @@ from fastapi.testclient import TestClient
 from pytest import fixture
 
 from src.app import app
-from src.auth import jwt, keycloak_client
+from src.auth import keycloak_client
+from src.auth.controller import AuthController
 
 
 @fixture
@@ -21,7 +22,9 @@ def mock_app():
 
 @fixture
 def load_jwks_response():
-    with open("src/tests/resources/get_jwks_response.json", "r", encoding="utf-8") as file:
+    with open(
+        "src/tests/resources/get_jwks_response.json", "r", encoding="utf-8"
+    ) as file:
         yield json.load(file)
 
 
@@ -36,10 +39,41 @@ def mock_jwks_response(load_jwks_response):
     yield
 
 
-class TestJWT:
+@fixture
+def load_token_response():
+    with open(
+        "src/tests/resources/get_token_response.json", "r", encoding="utf-8"
+    ) as file:
+        yield json.load(file)
+
+
+@fixture
+def mock_token_response(load_token_response):
+    responses.add(
+        responses.POST,
+        keycloak_client.KeycloakClient().token_url,
+        json=load_token_response,
+        status=200,
+    )
+    yield
+
+
+class TestAuthController:
     @responses.activate
     def test_get_public_keys(self, mock_jwks_response):
-        public_key = jwt.get_public_key(keycloak_client.KeycloakClient())
+        with open("src/tests/resources/jwks_key.txt", "r") as key_file:
+            expected_public_key = key_file.read().encode()
+        controller = AuthController()
+        public_key = controller.get_public_key()
+        assert public_key == expected_public_key
+
+    @responses.activate
+    def test_get_token(self, mock_token_response, load_token_response):
+        controller = AuthController()
+        token = controller.generate_token(
+            username="dummy-username", password="dummy-password"
+        )
+        assert token == load_token_response
 
 
 class TestRoutes:
