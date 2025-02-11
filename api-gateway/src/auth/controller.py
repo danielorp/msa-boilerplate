@@ -21,25 +21,6 @@ class AuthController:
     def __init__(self, keycloak_client = None):
         self.keycloak_client = keycloak_client or KeycloakClient()
 
-    async def get_current_user(self, token: Annotated[str, Depends(oauth2_scheme)]):
-        verified_token = await self.verify_token(token, self.keycloak_client)
-        user = verified_token.to_user()
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid authentication credentials",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-        return user
-
-    async def get_current_active_user(
-        self,
-        current_user: Annotated[User, Depends(get_current_user)],
-    ):
-        if current_user.disabled:
-            raise HTTPException(status_code=400, detail="Inactive user")
-        return current_user
-
     async def generate_token(self, username: str, password: str):
         return await self.keycloak_client.generate_token(username, password)
 
@@ -73,3 +54,22 @@ class AuthController:
             return KeycloakToken(**payload)
         except JWTError as e:
             raise HTTPException(status_code=401, detail=f"Invalid token: {e}")
+
+
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+    verified_token = await AuthController().verify_token(token)
+    user = verified_token.to_user()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return user
+
+async def get_current_active_user(
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    if current_user.disabled:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
