@@ -1,3 +1,4 @@
+from unittest.mock import Mock, patch
 import respx
 import json
 import pytest
@@ -54,6 +55,17 @@ def mock_token_response(load_token_response):
     yield
 
 
+@fixture
+def jwt_decode_response():
+    mock = Mock()
+    with patch("jose.jwt.decode", mock):
+        with open(
+            "src/tests/resources/jwt-decode.json", "r", encoding="utf-8"
+        ) as file:
+            mock.return_value = json.load(file)
+        yield
+
+
 class TestAuthController:
 
     @pytest.mark.asyncio
@@ -86,16 +98,10 @@ class TestRoutes:
         )
         assert "access_token" in response.json()
 
-    def test_get_user(self, mock_app):
-        response = mock_app.post(
-            "/auth/token",
-            data={"username": "", "password": ""},
-        )
-        assert response.status_code == 200
-        access_token = response.json()["access_token"]
-
+    @respx.mock
+    def test_get_user(self, mock_app, load_token_response, mock_jwks_response, jwt_decode_response):
+        expected_output = {'username': 'danielorp', 'email': None, 'full_name': None, 'disabled': False}
         response = mock_app.get(
-            "/auth/users/me", headers={"Authorization": f"Bearer {access_token}"}
+            "/auth/users/me", headers={"Authorization": f"Bearer {load_token_response['access_token']}"}
         )
-        assert response.status_code == 200
-        assert "username" in response.json()
+        assert response.json() == expected_output

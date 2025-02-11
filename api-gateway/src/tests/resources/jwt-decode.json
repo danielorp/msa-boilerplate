@@ -1,0 +1,37 @@
+{
+    "acr": "1",
+    "allowed-origins": [
+        "/*"
+    ],
+    "aud": [
+        "msa-app",
+        "account"
+    ],
+    "azp": "msa-app",
+    "email_verified": false,
+    "exp": 1739312569,
+    "iat": 1739312269,
+    "iss": "http://localhost:8080/realms/msa-realm",
+    "jti": "c3059eaa-5eaa-4585-b52d-1ad6ae8e7b46",
+    "preferred_username": "danielorp",
+    "realm_access": {
+        "roles": [
+            "default-roles-msa-realm",
+            "offline_access",
+            "uma_authorization"
+        ]
+    },
+    "resource_access": {
+        "account": {
+            "roles": [
+                "manage-account",
+                "manage-account-links",
+                "view-profile"
+            ]
+        }
+    },
+    "scope": "profile email",
+    "sid": "f8543147-5655-4cd1-bc16-bc212adcc5a1",
+    "sub": "edd4409d-77d7-4bb2-a224-bc9829004400",
+    "typ": "Bearer"
+}
