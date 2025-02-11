@@ -1,4 +1,4 @@
-import requests
+import httpx
 from fastapi import HTTPException
 from constants import KEYCLOAK_SERVER_URL, REALM_NAME, CLIENT_ID, CLIENT_SECRET
 
@@ -11,18 +11,19 @@ class KeycloakClient:
         self.jwks_url = f"{self.server_url}/realms/{self.realm_name}/protocol/openid-connect/certs"
         self.token_url = f"{self.server_url}/realms/{self.realm_name}/protocol/openid-connect/token"
 
-    def get_jwks_key(self) -> dict:
+    async def get_jwks_key(self) -> dict:
         """
-        Fetch the JSON Web Key Set (JWKS) from Keycloak.
+        Asynchronously fetch the JSON Web Key Set (JWKS) from Keycloak.
         """
-        response = requests.get(self.jwks_url)
-        response.raise_for_status()
-        jwks = response.json()
-        return jwks["keys"][1]  # Assuming the second key is the correct one
+        async with httpx.AsyncClient() as client:
+            response = await client.get(self.jwks_url)
+            response.raise_for_status()
+            jwks = response.json()
+            return jwks["keys"][1]  # Assuming the second key is the correct one
 
-    def generate_token(self, username: str, password: str) -> dict:
+    async def generate_token(self, username: str, password: str) -> dict:
         """
-        Generate an access token from Keycloak using username and password.
+        Asynchronously generate an access token from Keycloak using username and password.
         """
         payload = {
             "client_id": self.client_id,
@@ -37,12 +38,13 @@ class KeycloakClient:
             "Content-Type": "application/x-www-form-urlencoded"
         }
 
-        try:
-            response = requests.post(self.token_url, data=payload, headers=headers)
-            response.raise_for_status()
-            return response.json()
-        except requests.HTTPError as e:
-            raise HTTPException(
-                status_code=response.status_code,
-                detail=f"Failed to obtain token: {response.text}"
-            )
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.post(self.token_url, data=payload, headers=headers)
+                response.raise_for_status()
+                return response.json()
+            except httpx.HTTPStatusError as e:
+                raise HTTPException(
+                    status_code=response.status_code,
+                    detail=f"Failed to obtain token: {response.text}"
+                )

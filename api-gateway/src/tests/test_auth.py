@@ -1,8 +1,8 @@
-import responses
+import respx
 import json
+import pytest
 
 from http import HTTPStatus
-from unittest.mock import Mock
 
 from fastapi.testclient import TestClient
 from pytest import fixture
@@ -10,6 +10,8 @@ from pytest import fixture
 from src.app import app
 from src.auth import keycloak_client
 from src.auth.controller import AuthController
+
+pytest_plugins = ("pytest_asyncio",)
 
 
 @fixture
@@ -30,11 +32,8 @@ def load_jwks_response():
 
 @fixture
 def mock_jwks_response(load_jwks_response):
-    responses.add(
-        responses.GET,
-        keycloak_client.KeycloakClient().jwks_url,
-        json=load_jwks_response,
-        status=200,
+    respx.get(keycloak_client.KeycloakClient().jwks_url).respond(
+        json=load_jwks_response, status_code=HTTPStatus.OK
     )
     yield
 
@@ -49,28 +48,28 @@ def load_token_response():
 
 @fixture
 def mock_token_response(load_token_response):
-    responses.add(
-        responses.POST,
-        keycloak_client.KeycloakClient().token_url,
-        json=load_token_response,
-        status=200,
+    respx.post(keycloak_client.KeycloakClient().token_url).respond(
+        json=load_token_response, status_code=HTTPStatus.OK
     )
     yield
 
 
 class TestAuthController:
-    @responses.activate
-    def test_get_public_keys(self, mock_jwks_response):
+
+    @pytest.mark.asyncio
+    @respx.mock
+    async def test_get_public_keys(self, mock_jwks_response):
         with open("src/tests/resources/jwks_key.txt", "r") as key_file:
             expected_public_key = key_file.read().encode()
         controller = AuthController()
-        public_key = controller.get_public_key()
+        public_key = await controller.get_public_key()
         assert public_key == expected_public_key
 
-    @responses.activate
-    def test_get_token(self, mock_token_response, load_token_response):
+    @pytest.mark.asyncio
+    @respx.mock
+    async def test_get_token(self, mock_token_response, load_token_response):
         controller = AuthController()
-        token = controller.generate_token(
+        token = await controller.generate_token(
             username="dummy-username", password="dummy-password"
         )
         assert token == load_token_response

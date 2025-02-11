@@ -22,7 +22,7 @@ class AuthController:
         self.keycloak_client = keycloak_client or KeycloakClient()
 
     async def get_current_user(self, token: Annotated[str, Depends(oauth2_scheme)]):
-        verified_token = self.verify_token(token, self.keycloak_client)
+        verified_token = await self.verify_token(token, self.keycloak_client)
         user = verified_token.to_user()
         if not user:
             raise HTTPException(
@@ -40,10 +40,10 @@ class AuthController:
             raise HTTPException(status_code=400, detail="Inactive user")
         return current_user
 
-    def generate_token(self, username: str, password: str):
-        return self.keycloak_client.generate_token(username, password)
+    async def generate_token(self, username: str, password: str):
+        return await self.keycloak_client.generate_token(username, password)
 
-    def get_public_key(self):
+    async def get_public_key(self):
         """
         Fetch the public key from Keycloak JWKS.
         """
@@ -51,7 +51,7 @@ class AuthController:
         if cached_public_key:
             return cached_public_key
 
-        key_data = self.keycloak_client.get_jwks_key()
+        key_data = await self.keycloak_client.get_jwks_key()
         n = int.from_bytes(base64.urlsafe_b64decode(key_data["n"] + "=="), "big")
         e = int.from_bytes(base64.urlsafe_b64decode(key_data["e"] + "=="), "big")
         public_numbers = rsa.RSAPublicNumbers(e, n)
@@ -61,18 +61,14 @@ class AuthController:
         )
         return cached_public_key
 
-    def verify_token(
-        self,
-        token: str = Depends(oauth2_scheme),
-        keycloak_client: KeycloakClient = Depends(),
-    ):
+    async def verify_token(self, token: str):
         try:
-            public_key = self.get_public_key()
+            public_key = await self.get_public_key()
             payload = jwt.decode(
                 token,
                 public_key,
                 algorithms=["RS256"],
-                audience=keycloak_client.client_id,
+                audience=self.keycloak_client.client_id,
             )
             return KeycloakToken(**payload)
         except JWTError as e:
