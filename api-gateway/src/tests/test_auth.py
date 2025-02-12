@@ -24,53 +24,67 @@ def mock_app():
 
 
 @fixture
-def load_jwks_response():
+def load_jwks_response_200():
+    """
+    Response to -> await client.get(self.jwks_url)
+    in          -> KeycloakClient:get_jwks_key
+
+    """
     with open(
-        "src/tests/resources/get_jwks_response.json", "r", encoding="utf-8"
+        "src/tests/resources/response_200_get_jwks.json", "r", encoding="utf-8"
     ) as file:
         yield json.load(file)
 
 
 @fixture
-def mock_jwks_response(load_jwks_response):
+def mock_jwks_response_200(load_jwks_response_200):
     respx.get(keycloak_client.KeycloakClient().jwks_url).respond(
-        json=load_jwks_response, status_code=HTTPStatus.OK
+        json=load_jwks_response_200, status_code=HTTPStatus.OK
     )
     yield
 
 
 @fixture
-def load_token_response():
+def load_token_response_200():
+    """
+    Response to -> await client.post(self.token_url, data=payload, headers=headers)
+    in          -> KeycloakClient:generate_token
+
+    """
     with open(
-        "src/tests/resources/get_token_response.json", "r", encoding="utf-8"
+        "src/tests/resources/response_200_get_token.json", "r", encoding="utf-8"
     ) as file:
         yield json.load(file)
 
 
 @fixture
-def mock_token_response(load_token_response):
+def mock_token_response(load_token_response_200):
     respx.post(keycloak_client.KeycloakClient().token_url).respond(
-        json=load_token_response, status_code=HTTPStatus.OK
+        json=load_token_response_200, status_code=HTTPStatus.OK
     )
     yield
 
 
 @fixture
-def jwt_decode_response():
-    mock = Mock()
-    with patch("jose.jwt.decode", mock):
+def jwt_decode_response_success():
+    """
+    Response to -> jose.jwt.decode()
+    """
+    with patch("jose.jwt.decode", Mock()) as decode_mock:
         with open(
-            "src/tests/resources/jwt-decode.json", "r", encoding="utf-8"
+            "src/tests/resources/response_success_jwt_success.json",
+            "r",
+            encoding="utf-8",
         ) as file:
-            mock.return_value = json.load(file)
-        yield
+            decode_mock.return_value = json.load(file)
+        yield decode_mock
 
 
 class TestAuthController:
 
     @pytest.mark.asyncio
     @respx.mock
-    async def test_get_public_keys(self, mock_jwks_response):
+    async def test_get_public_keys(self, mock_jwks_response_200):
         with open("src/tests/resources/jwks_key.txt", "r") as key_file:
             expected_public_key = key_file.read().encode()
         controller = AuthController()
@@ -79,12 +93,12 @@ class TestAuthController:
 
     @pytest.mark.asyncio
     @respx.mock
-    async def test_get_token(self, mock_token_response, load_token_response):
+    async def test_get_token(self, mock_token_response, load_token_response_200):
         controller = AuthController()
         token = await controller.generate_token(
             username="dummy-username", password="dummy-password"
         )
-        assert token == load_token_response
+        assert token == load_token_response_200
 
 
 class TestRoutes:
@@ -92,16 +106,25 @@ class TestRoutes:
         response = mock_app.get("/health")
         assert response.status_code == HTTPStatus.OK
 
-    def test_generate_token_success(self, mock_app):
+    @respx.mock
+    def test_generate_token_success(self, mock_app, load_token_response_200):
         response = mock_app.post(
             "/auth/token", data={"username": "danielorp", "password": "orp9613"}
         )
-        assert "access_token" in response.json()
+        assert response.json()["access_token"] == load_token_response_200["access_token"]
 
     @respx.mock
-    def test_get_user(self, mock_app, load_token_response, mock_jwks_response, jwt_decode_response):
-        expected_output = {'username': 'danielorp', 'email': None, 'full_name': None, 'disabled': False}
+    def test_get_user(
+        self, mock_app, load_token_response_200, mock_jwks_response_200, jwt_decode_response_success
+    ):
+        expected_output = {
+            "username": "danielorp",
+            "email": None,
+            "full_name": None,
+            "disabled": False,
+        }
         response = mock_app.get(
-            "/auth/users/me", headers={"Authorization": f"Bearer {load_token_response['access_token']}"}
+            "/auth/users/me",
+            headers={"Authorization": f"Bearer {load_token_response_200['access_token']}"},
         )
         assert response.json() == expected_output
